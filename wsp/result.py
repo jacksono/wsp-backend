@@ -129,23 +129,25 @@ class GetOtherSongs(Resource):
         """
            End point for returning all other songs
             """
-        songs = Songs.query.filter_by(category="").all()
-        songs.extend(Songs.query.filter_by(category="XMAS").all())
+        songs = Songs.query.filter(Songs.category != "PRAISE")
+        # songs.extend(Songs.query.filter_by(category="XMAS").all())
         songs_results = []
         id = 1
         for result in songs:
-            output = {
-                "id": id,
-                "title": result.title,
-                "origin": result.origin,
-                "tempo": result.tempo,
-                "message": result.message,
-                "category": result.category,
-                "language": result.language
-            }
-            songs_results.append(output)
-            output = {}
-            id += 1
+            if result.category != "WORSHIP":
+                if result.category != "STG":
+                    output = {
+                        "id": id,
+                        "title": result.title,
+                        "origin": result.origin,
+                        "tempo": result.tempo,
+                        "message": result.message,
+                        "category": result.category,
+                        "language": result.language
+                    }
+                    songs_results.append(output)
+                    output = {}
+                    id += 1
         return songs_results
 
 
@@ -188,7 +190,6 @@ class EditSong(Resource):
                                                              args["message"],
                                                              args["language"])
         song = Songs.query.filter_by(title=song_title).first()
-        print("sdsdasf**************************************", song)
         song.title = title
         song.category = category
         song.origin = origin
@@ -227,3 +228,66 @@ class SongLyrics(Resource):
             "lyrics": song_lyrics
         }
         return output
+
+
+class AddSong(Resource):
+    """Add a new song: Route: POST /add/."""
+
+    def post(self):  # noqa
+        """Docstring.
+            """
+        parser = reqparse.RequestParser()
+        parser.add_argument(
+            "title",
+            required=True,
+            help="Please enter a song title.")
+        parser.add_argument(
+                            "category",
+                            required=False,
+                            )
+        parser.add_argument(
+                            "origin",
+                            required=False,
+                            )
+        parser.add_argument(
+                            "tempo",
+                            required=False,
+                            )
+        parser.add_argument(
+                            "message",
+                            required=False,
+                            )
+        parser.add_argument(
+                            "language",
+                            required=False,
+                            )
+        args = parser.parse_args()
+        title, category, origin, tempo, message, language = (args["title"],
+                                                             args["category"],
+                                                             args["origin"],
+                                                             args["tempo"],
+                                                             args["message"],
+                                                             args["language"])
+        songs_obj = Songs(title=title,
+                          origin=origin,
+                          message=message,
+                          tempo=tempo,
+                          category=category,
+                          language=language,
+                          )
+        try:
+            db.session.add(songs_obj)
+            db.session.commit()
+        except:
+            """Show when the the title already exists"""
+            db.session.rollback()
+            return {"message": "Error Somewhere"}, 400
+        msg = {"msg": "Added succesfully"}
+        msg.update({"title": title,
+                    "category": category,
+                    "origin": origin,
+                    "tempo": tempo,
+                    "message": message,
+                    "language": language
+                    })
+        return msg

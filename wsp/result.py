@@ -10,8 +10,26 @@ song_serializer = {"title": fields.String,
                    "tempo": fields.String,
                    "category": fields.String,
                    "message": fields.String,
+                   "language": fields.String,
                    "created": fields.DateTime,
                    "updated": fields.DateTime}
+
+def get_single_song(song_title):  # noqa
+    """
+       Returns a single song
+        """
+    song = Songs.query.filter_by(title=song_title).first()
+    output = {
+        "title": song.title,
+        "origin": song.origin,
+        "tempo": song.tempo,
+        "message": song.message,
+        "category": song.category,
+        "language": song.language,
+        "created": song.created,
+        "updated": song.updated
+    }
+    return marshal(output, song_serializer), 200
 
 
 class GetAllSongsToGlory(Resource):
@@ -40,6 +58,16 @@ class GetAllSongsToGlory(Resource):
         return stg_results
 
 
+class GetSingleSong(Resource):
+    """Shows a single song . Route: /api/v1/songs/<song_title> using GET."""
+
+    def get(self, song_title):  # noqa
+        """
+           End point for returning a single song
+            """
+        return get_single_song(song_title)
+
+
 class GetAllSongs(Resource):
     """Shows all results for STG. Route: /api/v1/songs/ using GET."""
 
@@ -54,18 +82,7 @@ class GetAllSongs(Resource):
         # if search_by_title.find("%20"):
         #     search_by_title = search_by_title.replace("%10", " ")
         if search_by_title:
-            song = Songs.query.filter_by(title=search_by_title).first()
-            output = {
-                "title": song.title,
-                "origin": song.origin,
-                "tempo": song.tempo,
-                "message": song.message,
-                "category": song.category,
-                "language": song.language,
-                "created": song.created,
-                "updated": song.updated
-            }
-            return output, 200
+            return get_single_song(search_by_title)
 
         for result in songs:
             output = {
@@ -106,7 +123,7 @@ class GetAllPraiseSongs(Resource):
                 "created": result.created,
                 "updated": result.updated
             }
-            songs_results.append(output)
+            songs_results.append(marshal(output, song_serializer))
             output = {}
             id += 1
         return songs_results
@@ -134,7 +151,7 @@ class GetAllWorshipSongs(Resource):
                 "created": result.created,
                 "updated": result.updated
             }
-            songs_results.append(output)
+            songs_results.append(marshal(output, song_serializer))
             output = {}
             id += 1
         return songs_results
@@ -164,7 +181,7 @@ class GetOtherSongs(Resource):
                         "created": result.created,
                         "updated": result.updated
                     }
-                    songs_results.append(output)
+                    songs_results.append(marshal(output, song_serializer))
                     output = {}
                     id += 1
         return songs_results
@@ -224,13 +241,17 @@ class EditSong(Resource):
             db.session.rollback()
             return {"message": "Error Somewhere"}, 400
         msg = {"msg": "Updated succesfully"}
-        msg.update({"title": title,
-                    "category": category,
-                    "origin": origin,
-                    "tempo": tempo,
-                    "message": message,
-                    "language": language
-                    })
+        msg.update(marshal({"title": title,
+                            "category": category,
+                            "origin": origin,
+                            "tempo": tempo,
+                            "message": message,
+                            "language": language,
+                            "created": song.created,
+                            "updated": song.updated
+                            },
+                           song_serializer)
+                   )
         return msg
 
 

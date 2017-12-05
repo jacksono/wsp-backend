@@ -1,9 +1,17 @@
 """Module to define buckeltist endpoints."""
 
-from flask_restful import Resource, reqparse
+from flask_restful import Resource, reqparse, marshal, fields
 from wsp.models import SongsToGlory, Songs, Lyrics
 from flask import request
 from app import db
+
+song_serializer = {"title": fields.String,
+                   "origin": fields.String,
+                   "tempo": fields.String,
+                   "category": fields.String,
+                   "message": fields.String,
+                   "created": fields.DateTime,
+                   "updated": fields.DateTime}
 
 
 class GetAllSongsToGlory(Resource):
@@ -23,7 +31,9 @@ class GetAllSongsToGlory(Resource):
                 "tempo": 'TEMPO',
                 "album": result.album,
                 "category": result.category,
-                "language": result.language
+                "language": result.language,
+                "created": result.created,
+                "updated": result.updated
             }
             stg_results.append(output)
             output = {}
@@ -51,7 +61,9 @@ class GetAllSongs(Resource):
                 "tempo": song.tempo,
                 "message": song.message,
                 "category": song.category,
-                "language": song.language
+                "language": song.language,
+                "created": song.created,
+                "updated": song.updated
             }
             return output, 200
 
@@ -63,9 +75,11 @@ class GetAllSongs(Resource):
                 "tempo": result.tempo,
                 "message": result.message,
                 "category": result.category,
-                "language": result.language
+                "language": result.language,
+                "created": result.created,
+                "updated": result.updated
             }
-            songs_results.append(output)
+            songs_results.append(marshal(output, song_serializer))
             output = {}
         return songs_results, 200
 
@@ -88,7 +102,9 @@ class GetAllPraiseSongs(Resource):
                 "tempo": result.tempo,
                 "message": result.message,
                 "category": result.category,
-                "language": result.language
+                "language": result.language,
+                "created": result.created,
+                "updated": result.updated
             }
             songs_results.append(output)
             output = {}
@@ -114,7 +130,9 @@ class GetAllWorshipSongs(Resource):
                 "tempo": result.tempo,
                 "message": result.message,
                 "category": result.category,
-                "language": result.language
+                "language": result.language,
+                "created": result.created,
+                "updated": result.updated
             }
             songs_results.append(output)
             output = {}
@@ -130,7 +148,6 @@ class GetOtherSongs(Resource):
            End point for returning all other songs
             """
         songs = Songs.query.filter(Songs.category != "PRAISE")
-        # songs.extend(Songs.query.filter_by(category="XMAS").all())
         songs_results = []
         id = 1
         for result in songs:
@@ -143,7 +160,9 @@ class GetOtherSongs(Resource):
                         "tempo": result.tempo,
                         "message": result.message,
                         "category": result.category,
-                        "language": result.language
+                        "language": result.language,
+                        "created": result.created,
+                        "updated": result.updated
                     }
                     songs_results.append(output)
                     output = {}

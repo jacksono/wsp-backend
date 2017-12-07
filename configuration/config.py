@@ -10,7 +10,7 @@ class Config(object):
 
     DEBUG = False
     TESTING = False
-    SQLALCHEMY_DATABASE_URI = 'postgres://zwjocxmezqozmm:3549cea49b7cd61c4c27dbb48dfd532fe7870f28456846e52ce6d11d3a63ae38@ec2-54-204-13-130.compute-1.amazonaws.com:5432/dkhhm0417sif6
+    SQLALCHEMY_DATABASE_URI = 'postgres://zwjocxmezqozmm:3549cea49b7cd61c4c27dbb48dfd532fe7870f28456846e52ce6d11d3a63ae38@ec2-54-204-13-130.compute-1.amazonaws.com:5432/dkhhm0417sif6'
 
     # SQLALCHEMY_DATABASE_URI = "sqlite:///" + \
     #     os.path.join(basedir, "wsp.sqlite")
@@ -21,7 +21,7 @@ class DevelopmentConfig(Config):
 
     DEBUG = True
     TESTING = True
-    SQLALCHEMY_DATABASE_URI = 'postgres://zwjocxmezqozmm:3549cea49b7cd61c4c27dbb48dfd532fe7870f28456846e52ce6d11d3a63ae38@ec2-54-204-13-130.compute-1.amazonaws.com:5432/dkhhm0417sif6
+    SQLALCHEMY_DATABASE_URI = 'postgres://zwjocxmezqozmm:3549cea49b7cd61c4c27dbb48dfd532fe7870f28456846e52ce6d11d3a63ae38@ec2-54-204-13-130.compute-1.amazonaws.com:5432/dkhhm0417sif6'
 '
     # SQLALCHEMY_DATABASE_URI = "sqlite:///" + \
     #     os.path.join(basedir, "wsp.sqlite")
@@ -34,7 +34,7 @@ class TestingConfig(Config):
 
     DEBUG = True
     TESTING = True
-    SQLALCHEMY_DATABASE_URI = 'postgres://zwjocxmezqozmm:3549cea49b7cd61c4c27dbb48dfd532fe7870f28456846e52ce6d11d3a63ae38@ec2-54-204-13-130.compute-1.amazonaws.com:5432/dkhhm0417sif6
+    SQLALCHEMY_DATABASE_URI = 'postgres://zwjocxmezqozmm:3549cea49b7cd61c4c27dbb48dfd532fe7870f28456846e52ce6d11d3a63ae38@ec2-54-204-13-130.compute-1.amazonaws.com:5432/dkhhm0417sif6'
     # SQLALCHEMY_DATABASE_URI = "sqlite:///" + \
     #     os.path.join(basedir, "test.db")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
@@ -46,7 +46,7 @@ class ProductionConfig(Config):
 
     DEBUG = False
     TESTING = False
-    SQLALCHEMY_DATABASE_URI = 'postgres://zwjocxmezqozmm:3549cea49b7cd61c4c27dbb48dfd532fe7870f28456846e52ce6d11d3a63ae38@ec2-54-204-13-130.compute-1.amazonaws.com:5432/dkhhm0417sif6
+    SQLALCHEMY_DATABASE_URI = 'postgres://zwjocxmezqozmm:3549cea49b7cd61c4c27dbb48dfd532fe7870f28456846e52ce6d11d3a63ae38@ec2-54-204-13-130.compute-1.amazonaws.com:5432/dkhhm0417sif6'
 
 
 app_config = {

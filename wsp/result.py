@@ -12,14 +12,19 @@ song_serializer = {"title": fields.String,
                    "category": fields.String,
                    "message": fields.String,
                    "language": fields.String,
+                   "lyrics": fields.String,
                    "created": fields.DateTime,
                    "updated": fields.DateTime}
 
-def get_single_song(song_title):  # noqa
+def get_single_song(song_title, category):  # noqa
     """
        Returns a single song
         """
-    song = Songs.query.filter_by(title=song_title).first()
+    if category == "STG":
+        song = SongsToGlory.query.filter_by(title=song_title).first()
+    else:
+        song = Songs.query.filter_by(title=song_title).first()
+
     output = {
         "title": song.title,
         "origin": song.origin,
@@ -60,13 +65,13 @@ class GetAllSongsToGlory(Resource):
 
 
 class GetSingleSong(Resource):
-    """Shows a single song . Route: /api/v1/songs/<song_title> using GET."""
+    """Shows a single song . Route: /api/v1/songs/<category>/<song_title> using GET."""
 
-    def get(self, song_title):  # noqa
+    def get(self, song_title, category):  # noqa
         """
            End point for returning a single song
             """
-        return get_single_song(song_title)
+        return get_single_song(song_title, category)
 
 
 class GetAllSongs(Resource):
@@ -76,14 +81,15 @@ class GetAllSongs(Resource):
         """
            End point for returning all songs
             """
-        args = request.args.to_dict()
+        # args = request.args.to_dict()
         songs = Songs.query.all()
+        songs.extend(SongsToGlory.query.all())
         songs_results = []
-        search_by_title = args.get("q")
+        # search_by_title = args.get("q")
         # if search_by_title.find("%20"):
         #     search_by_title = search_by_title.replace("%10", " ")
-        if search_by_title:
-            return get_single_song(search_by_title)
+        # if search_by_title:
+        #     return get_single_song(search_by_title)
 
         for result in songs:
             output = {
@@ -93,6 +99,7 @@ class GetAllSongs(Resource):
                 "tempo": result.tempo.upper(),
                 "message": result.message.upper(),
                 "category": result.category,
+                "lyrics": result.lyrics,
                 "language": result.language,
                 "created": result.created,
                 "updated": result.updated
@@ -189,9 +196,9 @@ class GetOtherSongs(Resource):
 
 
 class EditSong(Resource):
-    """Update a song list: Route: PUT /details/<song>."""
+    """Update a song list: Route: PUT /details/<category>/<song>."""
 
-    def put(self, song_title):  # noqa
+    def put(self, song_title, category):  # noqa
         """Docstring.
             """
         parser = reqparse.RequestParser()
@@ -226,13 +233,22 @@ class EditSong(Resource):
                                                              args["tempo"],
                                                              args["message"],
                                                              args["language"])
-        song = Songs.query.filter_by(title=song_title).first()
-        song.title = title
-        song.category = category
-        song.origin = origin
-        song.tempo = tempo
-        song.message = message
-        song.language = language
+        if category == "STG":
+            song = SongsToGlory.query.filter_by(title=song_title).first()
+            song.title = title
+            song.category = category
+            song.origin = origin
+            song.tempo = tempo
+            song.message = message
+            song.language = language
+        else:
+            song = Songs.query.filter_by(title=song_title).first()
+            song.title = title
+            song.category = category
+            song.origin = origin
+            song.tempo = tempo
+            song.message = message
+            song.language = language
 
         try:
             db.session.add(song)

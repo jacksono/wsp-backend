@@ -56,9 +56,9 @@ def populatedb():
         for row in range(2, stg.nrows):
             stg_obj = SongsToGlory(title=stg.row(row)[2].value,
                                    origin="STG",
-                                   album=stg.row(row)[4].value,
-                                   tempo=stg.row(row)[5].value,
-                                   category=stg.row(row)[1].value,
+                                   message=stg.row(row)[4].value,
+                                   tempo="TEMPO",
+                                   category="STG",
                                    language=stg.row(row)[6].value,
                                    )
             songs_obj = Songs(title=songs.row(row)[2].value,

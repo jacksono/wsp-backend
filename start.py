@@ -14,10 +14,10 @@ api.add_resource(GetAllSongs, "/songs/")
 api.add_resource(GetAllPraiseSongs, "/praise/")
 api.add_resource(GetAllWorshipSongs, "/worship/")
 api.add_resource(GetOtherSongs, "/other/")
-api.add_resource(EditSong, "/<song_title>")
+api.add_resource(EditSong, "/<category>/<song_title>")
 api.add_resource(SongLyrics, "/lyrics/<song_title>")
 api.add_resource(AddSong, "/add/")
-api.add_resource(GetSingleSong, "/song/<song_title>")
+api.add_resource(GetSingleSong, "/song/<category>/<song_title>")
 
 if __name__ == "__main__":
     app.run()

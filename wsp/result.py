@@ -6,6 +6,7 @@ from flask import request
 from app import db
 
 song_serializer = {"title": fields.String,
+                   "id": fields.Integer,
                    "origin": fields.String,
                    "tempo": fields.String,
                    "category": fields.String,
@@ -89,8 +90,8 @@ class GetAllSongs(Resource):
                 "id": result.id,
                 "title": result.title,
                 "origin": result.origin,
-                "tempo": result.tempo,
-                "message": result.message,
+                "tempo": result.tempo.upper(),
+                "message": result.message.upper(),
                 "category": result.category,
                 "language": result.language,
                 "created": result.created,
@@ -108,7 +109,7 @@ class GetAllPraiseSongs(Resource):
         """
            End point for returning all praise songs
             """
-        songs = Songs.query.filter_by(category="PRAISE")
+        songs = Songs.query.filter_by(category="PRAISE").order_by(Songs.created.desc())
         songs_results = []
         id = 1
         for result in songs:

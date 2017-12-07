@@ -14,9 +14,11 @@ class SongsToGlory(db.Model):
     language = db.Column(db.String(10))
     message = db.Column(db.String(50))
     category = db.Column(db.String(10))
+    comment = db.Column(db.String(1000))
     lyrics = db.Column(db.Boolean, default=True)
     created = db.Column(db.DateTime, default=datetime.now)
     updated = db.Column(db.DateTime, onupdate=datetime.now)
+    date_sang = db.Column(db.String(1000))
 
 
 class Lyrics(db.Model):
@@ -40,5 +42,7 @@ class Songs(db.Model):
     message = db.Column(db.String(50))
     lyrics = db.Column(db.Boolean, default=False)
     category = db.Column(db.String(10))
+    comment = db.Column(db.String(1000))
     created = db.Column(db.DateTime, default=datetime.now)
     updated = db.Column(db.DateTime, onupdate=datetime.now)
+    date_sang = db.Column(db.String(1000))

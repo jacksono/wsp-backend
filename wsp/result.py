@@ -32,6 +32,7 @@ def get_single_song(song_title, category):  # noqa
         "message": song.message,
         "category": song.category,
         "language": song.language,
+        "lyrics": result.lyrics,
         "created": song.created,
         "updated": song.updated
     }
@@ -53,13 +54,14 @@ class GetAllSongsToGlory(Resource):
                 "title": result.title,
                 "origin": result.origin,
                 "tempo": 'TEMPO',
-                "album": result.album,
+                "message": result.message,
                 "category": result.category,
+                "lyrics": result.lyrics,
                 "language": result.language,
                 "created": result.created,
                 "updated": result.updated
             }
-            stg_results.append(output)
+            stg_results.append(marshal(output, song_serializer))
             output = {}
         return stg_results
 
@@ -128,6 +130,7 @@ class GetAllPraiseSongs(Resource):
                 "message": result.message,
                 "category": result.category,
                 "language": result.language,
+                "lyrics": result.lyrics,
                 "created": result.created,
                 "updated": result.updated
             }
@@ -156,6 +159,7 @@ class GetAllWorshipSongs(Resource):
                 "message": result.message,
                 "category": result.category,
                 "language": result.language,
+                "lyrics": result.lyrics,
                 "created": result.created,
                 "updated": result.updated
             }
@@ -186,6 +190,7 @@ class GetOtherSongs(Resource):
                         "message": result.message,
                         "category": result.category,
                         "language": result.language,
+                        "lyrics": result.lyrics,
                         "created": result.created,
                         "updated": result.updated
                     }

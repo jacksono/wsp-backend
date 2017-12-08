@@ -152,7 +152,7 @@ class GetAllWorshipSongs(Resource):
         """
            End point for returning all worship songs
             """
-        songs = Songs.query.filter_by(category="WORSHIP")
+        songs = Songs.query.filter_by(category="WORSHIP").order_by(Songs.created.desc())
         songs_results = []
         id = 1
         for result in songs:
@@ -182,7 +182,7 @@ class GetOtherSongs(Resource):
         """
            End point for returning all other songs
             """
-        songs = Songs.query.filter(Songs.category != "PRAISE")
+        songs = Songs.query.filter(Songs.category != "PRAISE").order_by(Songs.created.desc())
         songs_results = []
         id = 1
         for result in songs:

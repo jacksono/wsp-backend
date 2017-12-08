@@ -26,7 +26,7 @@ class Lyrics(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100))
-    lyrics = db.Column(db.String(1000))
+    lyrics = db.Column(db.String(2000))
     created = db.Column(db.DateTime, default=datetime.now)
     updated = db.Column(db.DateTime, onupdate=datetime.now)
 

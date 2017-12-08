@@ -3,7 +3,7 @@
 from app import db, app
 from flask_script import Manager, prompt_bool
 from flask_migrate import Migrate, MigrateCommand
-from wsp.models import SongsToGlory, Songs, Lyrics # noqa
+from wsp.models import Lyrics, Songs, SongsToGlory # noqa
 from xlrd import open_workbook
 
 # Manager instance
@@ -26,23 +26,26 @@ def dropdb():
     """Clear all the data in the tables."""
     if prompt_bool("Are you sure you want to loose all your data?"):
         db.drop_all()
-        print("Dropped the database")
+        print("Dropped the database tables")
 
 
 @manager.command
 def populatedb():
     """Populate all the data in the tables."""
     if prompt_bool("Are you sure you want to add the data?"):
-        wb = open_workbook("wsp3.xlsx")
+        wb = open_workbook("wsp5.xlsx")
         stg = wb.sheets()[1]
         songs = wb.sheets()[0]
-        lyrix = wb.sheets()[2]
+        lyrix = wb.sheets()[3]
         i = 0
         text = ''
-        for row in range(0, 42):  # should match no. of columns
-            for line in range(60):  # to cater for the longest lyrics
+        for row in range(0, 148):  # should match no. of columns
+            for line in range(65):  # to cater for the longest lyrics
                     if lyrix.row(line+4)[i].value == '':
-                        text += '$$'
+                        if text[-3] == '$':
+                            break
+                        else:
+                            text += '$$'
                     else:
                         text += lyrix.row(line+4)[i].value
                     text += '%%'

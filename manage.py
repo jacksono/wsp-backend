@@ -33,7 +33,7 @@ def dropdb():
 def populatedb():
     """Populate all the data in the tables."""
     if prompt_bool("Are you sure you want to add the data?"):
-        wb = open_workbook("wsp5.xlsx")
+        wb = open_workbook("wsp.xlsx")
         stg = wb.sheets()[1]
         songs = wb.sheets()[0]
         lyrix = wb.sheets()[3]
@@ -63,19 +63,27 @@ def populatedb():
                                    tempo="TEMPO",
                                    category="STG",
                                    language=stg.row(row)[6].value,
+                                   comment=stg.row(row)[8].value
                                    )
+            db.session.add(stg_obj)
+            db.session.commit()
+            stg_obj = ''
+
+        for row in range(2, songs.nrows):
             songs_obj = Songs(title=songs.row(row)[2].value,
                               origin=songs.row(row)[3].value,
                               message=songs.row(row)[6].value.upper(),
                               tempo=songs.row(row)[4].value.upper(),
-                              category=songs.row(row)[1].value,
                               language=songs.row(row)[5].value,
+                              comment=songs.row(row)[7].value
                               )
+            if songs.row(row)[1].value:
+                songs_obj.category = songs.row(row)[1].value
+            else:
+                songs_obj.category = "OTHER"
 
-            db.session.add(stg_obj)
             db.session.add(songs_obj)
             db.session.commit()
-            stg_obj = ''
             songs_obj = ''
 
         print("Database Populated")

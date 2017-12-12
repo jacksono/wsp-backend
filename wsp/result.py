@@ -375,3 +375,34 @@ class AddSong(Resource):
                     "comment": comment
                     })
         return msg
+
+
+class AddLyrics(Resource):
+    """Add a new song lyrics: Route: POST /lyrics/<song_title>."""
+
+    def post(self, song_title):  # noqa
+        """Docstring.
+            """
+        parser = reqparse.RequestParser()
+        parser.add_argument(
+                            "lyrics",
+                            required=False,
+                            )
+
+        args = parser.parse_args()
+        lyrics = (args["lyrics"])
+
+        lyrics_obj = Lyrics(title=song_title,
+                            lyrics=lyrics)
+        try:
+            db.session.add(lyrics_obj)
+            db.session.commit()
+        except:
+            """Show when the the title already exists"""
+            db.session.rollback()
+            return {"message": "Error Somewhere"}, 400
+        msg = {"msg": "Added succesfully"}
+        msg.update({"title": song_title,
+                    "lyrics": lyrics
+                    })
+        return msg

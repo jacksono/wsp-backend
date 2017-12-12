@@ -3,7 +3,7 @@
 from wsp.user_routes import (Home)
 from wsp.result import (GetAllSongsToGlory, GetAllSongs, GetAllPraiseSongs,
                         GetAllWorshipSongs, GetOtherSongs, EditSong, SongLyrics,
-                        AddSong, GetSingleSong)
+                        AddSong, GetSingleSong, AddLyrics)
 from app import api, app
 
 
@@ -16,6 +16,7 @@ api.add_resource(GetAllWorshipSongs, "/worship/")
 api.add_resource(GetOtherSongs, "/other/")
 api.add_resource(EditSong, "/<category>/<song_title>")
 api.add_resource(SongLyrics, "/lyrics/<song_title>")
+api.add_resource(AddLyrics, "/lyrics/<song_title>")
 api.add_resource(AddSong, "/add/")
 api.add_resource(GetSingleSong, "/song/<category>/<song_title>")
 

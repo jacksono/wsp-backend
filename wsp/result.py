@@ -242,14 +242,19 @@ class EditSong(Resource):
                             "comment",
                             required=False,
                             )
+        parser.add_argument(
+                            "lyrics",
+                            required=False,
+                            )
         args = parser.parse_args()
-        title, category, origin, tempo, message, language, comment = (args["title"],
-                                                                      args["category"],
-                                                                      args["origin"],
-                                                                      args["tempo"],
-                                                                      args["message"],
-                                                                      args["language"],
-                                                                      args["comment"])
+        title, category, origin, tempo, message, language, comment, lyrics = (args["title"],
+                                                                              args["category"],
+                                                                              args["origin"],
+                                                                              args["tempo"],
+                                                                              args["message"],
+                                                                              args["language"],
+                                                                              args["comment"],
+                                                                              args["lyrics"])
         if category == "STG":
             song = SongsToGlory.query.filter_by(title=song_title).first()
             song.title = title
@@ -261,13 +266,22 @@ class EditSong(Resource):
             song.comment = comment
         else:
             song = Songs.query.filter_by(title=song_title).first()
-            song.title = title
-            song.category = category
-            song.origin = origin
-            song.tempo = tempo
-            song.message = message
-            song.language = language
-            song.comment = comment
+            if title:
+                song.title = title
+            if category:
+                song.category = category
+            if origin:
+                song.origin = origin
+            if tempo:
+                song.tempo = tempo
+            if message:
+                song.message = message
+            if language:
+                song.language = language
+            if comment:
+                song.comment = comment
+            if lyrics:
+                song.lyrics = lyrics
 
         try:
             db.session.add(song)
@@ -283,6 +297,7 @@ class EditSong(Resource):
                             "tempo": tempo,
                             "message": message,
                             "language": language,
+                            "lyrics": lyrics,
                             "created": song.created,
                             "comment": song.comment,
                             "updated": song.updated
@@ -342,21 +357,27 @@ class AddSong(Resource):
                             "comment",
                             required=False,
                             )
+        parser.add_argument(
+                            "lyrics",
+                            required=False,
+                            )
         args = parser.parse_args()
-        title, category, origin, tempo, message, language, comment = (args["title"],
-                                                                      args["category"],
-                                                                      args["origin"],
-                                                                      args["tempo"],
-                                                                      args["message"],
-                                                                      args["language"],
-                                                                      args["comment"])
+        title, category, origin, tempo, message, language, comment, lyrics = (args["title"],
+                                                                              args["category"],
+                                                                              args["origin"],
+                                                                              args["tempo"],
+                                                                              args["message"],
+                                                                              args["language"],
+                                                                              args["comment"],
+                                                                              args["lyrics"])
         songs_obj = Songs(title=title,
                           origin=origin,
                           message=message,
                           tempo=tempo,
                           category=category,
                           language=language,
-                          comment=comment
+                          comment=comment,
+                          lyrics=lyrics
                           )
         try:
             db.session.add(songs_obj)

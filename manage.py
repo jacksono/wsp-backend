@@ -35,7 +35,7 @@ def populatedb():
     if prompt_bool("Are you sure you want to add the data?"):
         wb = open_workbook("wsp6.xlsx")
         stg = wb.sheets()[2]
-        # songs = wb.sheets()[0]
+        songs = wb.sheets()[0]
         lyrix = wb.sheets()[3]
         i = 0
         text = ''
@@ -69,22 +69,22 @@ def populatedb():
             db.session.commit()
             stg_obj = ''
 
-        # for row in range(2, songs.nrows):
-        #     songs_obj = Songs(title=songs.row(row)[2].value,
-        #                       origin=songs.row(row)[3].value,
-        #                       message=songs.row(row)[6].value.upper(),
-        #                       tempo=songs.row(row)[4].value.upper(),
-        #                       language=songs.row(row)[5].value,
-        #                       comment=songs.row(row)[7].value
-        #                       )
-        #     if songs.row(row)[1].value:
-        #         songs_obj.category = songs.row(row)[1].value
-        #     else:
-        #         songs_obj.category = "OTHER"
-        #
-        #     db.session.add(songs_obj)
-        #     db.session.commit()
-        #     songs_obj = ''
+        for row in range(2, songs.nrows):
+            songs_obj = Songs(title=songs.row(row)[2].value,
+                              origin=songs.row(row)[3].value,
+                              message=songs.row(row)[6].value.upper(),
+                              tempo=songs.row(row)[4].value.upper(),
+                              language=songs.row(row)[5].value,
+                              comment=songs.row(row)[7].value
+                              )
+            if songs.row(row)[1].value:
+                songs_obj.category = songs.row(row)[1].value
+            else:
+                songs_obj.category = "OTHER"
+
+            db.session.add(songs_obj)
+            db.session.commit()
+            songs_obj = ''
 
         print("Database Populated")
 

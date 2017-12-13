@@ -70,13 +70,13 @@ class GetAllSongsToGlory(Resource):
 
 
 class GetSingleSong(Resource):
-    """Shows a single song . Route: /api/v1/songs/<category>/<song_title> using GET."""
+    """Shows a single song . Route: /api/v1/songs/<song_category>/<song_title> using GET."""
 
-    def get(self, song_title, category):  # noqa
+    def get(self, song_title, song_category):  # noqa
         """
            End point for returning a single song
             """
-        return get_single_song(song_title, category)
+        return get_single_song(song_title, song_category)
 
 
 class GetAllSongs(Resource):
@@ -208,9 +208,9 @@ class GetOtherSongs(Resource):
 
 
 class EditSong(Resource):
-    """Update a song list: Route: PUT /details/<category>/<song>."""
+    """Update a song list: Route: PUT /details/<song_category>/<song_title>."""
 
-    def put(self, song_title, category):  # noqa
+    def put(self, song_title, song_category):  # noqa
         """Docstring.
             """
         parser = reqparse.RequestParser()
@@ -255,15 +255,22 @@ class EditSong(Resource):
                                                                               args["language"],
                                                                               args["comment"],
                                                                               args["lyrics"])
-        if category == "STG":
+        if song_category == "STG":
             song = SongsToGlory.query.filter_by(title=song_title).first()
-            song.title = title
-            song.category = category
-            song.origin = origin
-            song.tempo = tempo
-            song.message = message
-            song.language = language
-            song.comment = comment
+            if title:
+                song.title = title
+            if category:
+                song.category = category
+            if origin:
+                song.origin = origin
+            if tempo:
+                song.tempo = tempo
+            if message:
+                song.message = message
+            if language:
+                song.language = language
+            if comment:
+                song.comment = comment
         else:
             song = Songs.query.filter_by(title=song_title).first()
             if title:
@@ -423,6 +430,37 @@ class AddLyrics(Resource):
             db.session.rollback()
             return {"message": "Error Somewhere"}, 400
         msg = {"msg": "Added succesfully"}
+        msg.update({"title": song_title,
+                    "lyrics": lyrics
+                    })
+        return msg
+
+
+class EditLyrics(Resource):
+    """Add a new song lyrics: Route: PUT /lyrics/<song_title>."""
+
+    def put(self, song_title):  # noqa
+        """Docstring.
+            """
+        parser = reqparse.RequestParser()
+        parser.add_argument(
+                            "lyrics",
+                            required=False,
+                            )
+
+        args = parser.parse_args()
+        lyrics = (args["lyrics"])
+
+        lyrics_obj = Lyrics.query.filter_by(title=song_title).first()
+        lyrics_obj.lyrics = lyrics
+        try:
+            db.session.add(lyrics_obj)
+            db.session.commit()
+        except:
+            """Show when the the title already exists"""
+            db.session.rollback()
+            return {"message": "Error Somewhere"}, 400
+        msg = {"msg": "Updates succesfully"}
         msg.update({"title": song_title,
                     "lyrics": lyrics
                     })

@@ -7,8 +7,8 @@ from flask_cors import CORS, cross_origin # noqa
 
 app = Flask(__name__)
 CORS(app)
-# app.config.from_object(app_config["production"])
-app.config.from_object(app_config["development"])
+app.config.from_object(app_config["production"])
+# app.config.from_object(app_config["development"])
 db = SQLAlchemy(app)
 
 

@@ -88,7 +88,7 @@ class GetAllSongs(Resource):
             """
         # args = request.args.to_dict()
         songs = Songs.query.all()
-        songs.extend(SongsToGlory.query.all())
+        # songs.extend(SongsToGlory.query.all())
         songs_results = []
         # search_by_title = args.get("q")
         # if search_by_title.find("%20"):
